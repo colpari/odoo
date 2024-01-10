@@ -111,7 +111,7 @@ function humanNumber(number, options = { decimals: 0, minDigits: 1 }) {
  * @returns {string}
  */
 export function formatFloat(value, options = {}) {
-    if (value === false) {
+    if ((value === false) || !Number.isFinite(value)) {
         return "";
     }
     if (options.humanReadable) {
@@ -130,10 +130,10 @@ export function formatFloat(value, options = {}) {
     }
     const formatted = (value || 0).toFixed(precision || 2).split(".");
     formatted[0] = insertThousandsSep(formatted[0], thousandsSep, grouping);
-    if (options.noTrailingZeros) {
+    if (options.noTrailingZeros && formatted[1]) {
         formatted[1] = formatted[1].replace(/0+$/, "");
     }
-    return formatted[1].length ? formatted.join(decimalPoint) : formatted[0];
+    return formatted[1] ? formatted.join(decimalPoint) : formatted[0];
 }
 
 /**
